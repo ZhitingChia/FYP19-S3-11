@@ -6,9 +6,13 @@ import EmpNavbar from './EmpNavbar'
 import PostJob from './PostJob'
 import EmpPanel from './EmpPanel'
 import EmpFeed from './EmpFeed'
-//import EmpJobView from './JobView/EmpJobView'
+import EmpJobView from './JobView/EmpJobView'
 import EditJob from './JobEdit/EditJob'
 
+import EmpProfileView from './ProfileView/EmpProfileView'
+import EmpProfileEdit from './ProfileEditor/EmpEditProfile'
+
+import About from '../common_assets/About'
 
 const herokuURL = require('../../config')
 
@@ -27,7 +31,8 @@ class Employer extends Component {
             companyDescription: null,
             industry: null,
             numOfJobs: null,
-            numOfApplicants: null
+            numOfApplicants: null,
+            mainContent: null
 
         }
 
@@ -53,54 +58,71 @@ class Employer extends Component {
             jobrequiredskills: job.requiredskills,
             jobtitle: job.title
         };
+
+        this.setState({ mainContent: 'viewjob' })
+    }
+
+    editJobHandler = (job) => {
+        this.setState({ mainContent: 'editjob' })
     }
 
 
 
-    // mainContent = () => {
-    //     const contentID = this.state.mainContent
-    //     switch (contentID) {
-    //         case 'viewprofile':
-    //             return <EmpProfileView companyName={this.state.companyName} companyDescription={this.state.companyDescription} industry={this.state.industry} companyEmail={this.state.companyEmail} industry={this.state.industry} />
-    //         case 'editprofile':
-    //             return <EmpProfileEdit empID={this.state.id} companyName={this.state.companyName}
-    //                 companyPhone={this.state.companyPhone} companyAddress={this.state.companyAddress}
-    //                 industry={this.state.industry} companyDescription={this.state.companyDescription} />
-    //         case 'about':
-    //             return <About />
-    //         case 'blog':
-    //             return <h3>blog</h3>
-    //         case 'postjob':
-    //             return <PostJob />
-    //         // case 'viewjob':
-    //         //     return <EmpJobView
-    //         //         jobID={window.jobDetails.jobid}
-    //         //         jobtitle={window.jobDetails.jobtitle}
-    //         //         jobskills={window.jobDetails.jobrequiredskills}
-    //         //         jobdescription={window.jobDetails.jobdescription}
-    //         //         joblocation={window.jobDetails.joblocation}
-    //         //         jobindustry={window.jobDetails.jobindustry}
-    //         //         dateposted={window.jobDetails.jobpostdate}
-    //         //         editJobHandler={this.editJobHandler}
+    mainContent = () => {
+        const contentID = this.state.mainContent
+        switch (contentID) {
+            // case 'viewprofile':
+            //     return <EmpProfileView companyName={this.state.companyName} companyDescription={this.state.companyDescription} industry={this.state.industry} companyEmail={this.state.companyEmail} industry={this.state.industry} />
+            // case 'editprofile':
+            //     return <EmpProfileEdit empID={this.state.id} companyName={this.state.companyName}
+            //         companyPhone={this.state.companyPhone} companyAddress={this.state.companyAddress}
+            //         industry={this.state.industry} companyDescription={this.state.companyDescription} />
+            // case 'about':
+            //     return <About />
+            case 'blog':
+                return <h3>blog</h3>
+            case 'postjob':
+                return <PostJob />
+            case 'viewjob':
+                return <EmpJobView
+                    jobID={window.jobDetails.jobid}
+                    jobtitle={window.jobDetails.jobtitle}
+                    jobskills={window.jobDetails.jobrequiredskills}
+                    jobdescription={window.jobDetails.jobdescription}
+                    joblocation={window.jobDetails.joblocation}
+                    jobindustry={window.jobDetails.jobindustry}
+                    dateposted={window.jobDetails.jobpostdate}
+                    editJobHandler={this.editJobHandler}
 
-    //         //     />
+                />
 
-    //         case 'editjob':
-    //             return <EditJob
-    //                 jobID={window.jobDetails.jobid}
-    //                 jobtitle={window.jobDetails.jobtitle}
-    //                 jobskills={window.jobDetails.jobrequiredskills}
-    //                 jobdescription={window.jobDetails.jobdescription}
-    //                 joblocation={window.jobDetails.joblocation}
-    //                 jobindustry={window.jobDetails.jobindustry}
-    //                 dateposted={window.jobDetails.jobpostdate}
-    //                 mainPageHandler={this.mainPageHandler}
-    //             />
+            case 'editjob':
+                return <EditJob
+                    jobID={window.jobDetails.jobid}
+                    jobtitle={window.jobDetails.jobtitle}
+                    jobskills={window.jobDetails.jobrequiredskills}
+                    jobdescription={window.jobDetails.jobdescription}
+                    joblocation={window.jobDetails.joblocation}
+                    jobindustry={window.jobDetails.jobindustry}
+                    dateposted={window.jobDetails.jobpostdate}
+                    mainPageHandler={this.mainPageHandler}
+                />
 
 
-    //         case '*': return <h3>{contentID} not found</h3>
-    //     }
-    // }
+            case '*': return <h3>{contentID} not found</h3>
+            default: return <div className="row mb-2">
+                <div className="col-md-4">
+                    <EmpPanel companyName={this.state.companyName}
+                        numOfJobs={this.state.numOfJobs}
+                    />
+                </div>
+                <div className="col-md-8">
+                    <EmpFeed updateNumOfJobs={this.updateNumOfJobs} viewJobHandler={this.viewJobHandler} />
+                </div>
+            </div>
+
+        }
+    }
 
     fetchEmployerDetails = () => {
         const apiURL = `${herokuURL}employer/employerinfo/${this.state.id}`
@@ -134,15 +156,16 @@ class Employer extends Component {
 
     render() {
         return (
-            <div className="row mb-2">
-                <div className="col-md-4">
-                    <EmpPanel companyName={this.state.companyName}
-                        numOfJobs={this.state.numOfJobs}
-                    />
-                </div>
-                <div className="col-md-8">
-                    <EmpFeed updateNumOfJobs={this.updateNumOfJobs} viewJobHandler={this.viewJobHandler} />
-                </div>
+
+
+            <div>
+                {/* Fixed component */}
+                <EmpNavbar
+                    username={this.state.username}
+                    setMainContent={this.setMainContent} />
+
+                {/* Flexible content */}
+                <this.mainContent />
             </div>
         )
     }
