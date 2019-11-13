@@ -133,9 +133,9 @@ class EmpAppCard extends Component {
                 this.setState({ error: true })
             })
 
-        if (`${this.state.jobExpList.length}<1`) {
-            this.setState({ noJobExp: true })
-        }
+        // if (`${this.state.jobExpList.length}<1`) {
+        //     this.setState({ noJobExp: true })
+        // }
     }
 
     //gets all the awards of the applicant
