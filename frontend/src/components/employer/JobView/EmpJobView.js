@@ -33,7 +33,7 @@ class EmpJobView extends Component {
             .then(response => response.json())
             .then(data => {
                 this.setState({ appList: data })
-                console.log(`total applicants : ${this.state.appList.length}`)
+                // console.log(`total applicants : ${this.state.appList.length}`)
             })
 
             .catch(error => {
@@ -45,11 +45,10 @@ class EmpJobView extends Component {
     // fetch  applicants
     componentDidMount() {
         this.getApplicants(this.props.jobID)
-        console.log(this.props.jobID)
+        // console.log(this.props.jobID)
     }
 
     applicantContent = () => {
-        console.log(this.state.appList)
         // Loading
         if (this.state.appList.length === 0 && !this.state.error) {
             return (
@@ -65,12 +64,13 @@ class EmpJobView extends Component {
             return (
                 this.state.appList.map((applicant) => {
                     // job.dateposted = job.dateposted.substr(0,10)
-                    console.log(applicant)
+                    // console.log('appdata')
+                    // console.log(applicant)
                     return (
                         <Row>
                             <EmpAppCard appID={1} appName={applicant.firstname.concat(" ", applicant.lastname)} appSkills={applicant.skills} appPhone={applicant.phone} appEmail={applicant.email} />
                         </Row>
-                        // appID={applicant.id}
+
                     )
                 })
             )
