@@ -4,17 +4,11 @@
 // It accepts parameters in the form of props such as title, companyName, joblocation, jobindustry and reqSkills.
 // Job description is to be passed in as children.
 
-//EmpAppCard is card that briefly summarises details about each applicant.
-//It accepts parameters in the form of props such as 
-/*appName,appSkills,appContact,degree,university, gpa, position,company,
-awardname, awarddate, certname, certbody, projecttitle and dateapplied
-*/
 
 import React, { Component } from 'react';
-import { Card, Button, Col, Row, Alert } from 'react-bootstrap';
+import { Card, Button, Col, Row, Alert, Table } from 'react-bootstrap';
 import '../ProfileView/Card.css';
 import apiURL from '../../../config'
-//import './EmpCard.css'
 
 // need to handle if empty.s
 
@@ -82,6 +76,7 @@ class EmpAppCard extends Component {
     constructor(props) {
         super()
         this.props = props;
+        // console.log(props.appID)
 
         this.state = {
             educationList: [],
@@ -90,77 +85,91 @@ class EmpAppCard extends Component {
             certsList: [],
             projectsList: [],
             showAlert: false,
-            error: false
+            error: false,
+            noEducation: false,
+            noJobExp: false,
+            noAwards: false,
+            noCerts: false,
+            noProjects: false
         }
     }
 
     //gets all the education of the applicant
     getEducation = (appID) => {
-        //unconfirmed link
-        const localhost = `http://localhost:3001/employer/jobview/appEdu/${appID}`
-        const url = apiURL + 'employer/jobview/appEdu' + { appID }
+        const localhost = `http://localhost:3001/student/studenteducation/${appID}`
+        const url = apiURL + 'student/studenteducation/' + { appID }
 
         fetch(localhost)
             .then(response => response.json())
             .then(data => {
-                this.setState({ educationList: data })
-                console.log(`Number of education : ${this.state.educationList.length}`)
+                this.setState({ educationList: data.Education })
+                // console.log(`Number of education : ${this.state.educationList.length}`)
             })
 
             .catch(error => {
-                console.log(`Error at getEducation : ${error}`)
                 this.setState({ error: true })
             })
+
+        // if (this.state.educationList.length < 1 || this.state.educationList === undefined) {
+        //     this.setState({ noEducation: true })
+        // }
     }
+
 
     //gets all the job experience of the applicant
     getJobExp = (appID) => {
-        //unconfirmed link
-        const localhost = `http://localhost:3001/employer/jobview/appjobexp/${appID}`
-        const url = apiURL + 'employer/jobview/appjobexp' + { appID }
+        const localhost = `http://localhost:3001/student/studentworkexp/${appID}`
+        const url = apiURL + 'student/studentworkexp/' + { appID }
 
         fetch(localhost)
             .then(response => response.json())
             .then(data => {
-                this.setState({ jobExpList: data })
-                console.log(`Number of education : ${this.state.jobExpList.length}`)
+                this.setState({ jobExpList: data.WorkExp })
+                // console.log(`Number of job experiences : ${this.state.jobExpList.length}`)
             })
 
             .catch(error => {
                 console.log(`Error at getJobExp : ${error}`)
                 this.setState({ error: true })
             })
+
+        // if (`${this.state.jobExpList.length}<1`) {
+        //     this.setState({ noJobExp: true })
+        // }
     }
 
     //gets all the awards of the applicant
     getAwards = (appID) => {
-        //unconfirmed link
-        const localhost = `http://localhost:3001/employer/jobview/appawards/${appID}`
-        const url = apiURL + 'employer/jobview/appawards' + { appID }
+        const localhost = `http://localhost:3001/student/studentawards/${appID}`
+        const url = apiURL + 'student/studentawards/' + { appID }
 
         fetch(localhost)
             .then(response => response.json())
             .then(data => {
-                this.setState({ awardsList: data })
-                console.log(`Number of awards : ${this.state.awardsList.length}`)
+                this.setState({ awardsList: data.Awards })
+                // console.log(`Number of awards : ${this.state.awardsList.length}`)
             })
 
             .catch(error => {
                 console.log(`Error at getAwards : ${error}`)
                 this.setState({ error: true })
             })
+
+        // if (`${this.state.awardsList.length}<1`) {
+        //     this.setState({ noAwards: true })
+        // }
     }
 
     //gets all the awards of the applicant
     getCerts = (appID) => {
-        //unconfirmed link
-        const localhost = `http://localhost:3001/employer/jobview/appcerts/${appID}`
-        const url = apiURL + 'employer/jobview/appcerts' + { appID }
+        const localhost = `http://localhost:3001/student/studentcertificate/${appID}`
+        const url = apiURL + 'student/studentcertificate/' + { appID }
+
 
         fetch(localhost)
             .then(response => response.json())
             .then(data => {
-                this.setState({ certsList: data })
+                this.setState({ certsList: data.Certification })
                 console.log(`Number of certs : ${this.state.certsList.length}`)
             })
 
@@ -168,29 +177,36 @@ class EmpAppCard extends Component {
                 console.log(`Error at getCerts : ${error}`)
                 this.setState({ error: true })
             })
+
+        // if (`${this.state.certsList.length}<1`) {
+        //     this.setState({ noCerts: true })
+        // }
     }
 
     //gets all the awards of the applicant
     getProjects = (appID) => {
         //unconfirmed link
-        const localhost = `http://localhost:3001/employer/jobview/appprojects/${appID}`
-        const url = apiURL + 'employer/jobview/appprojects' + { appID }
+        const localhost = `http://localhost:3001/student/studentproject/${appID}`
+        const url = apiURL + 'student/studentproject/' + { appID }
 
         fetch(localhost)
             .then(response => response.json())
             .then(data => {
-                this.setState({ projectsList: data })
-                console.log(`Number of projects : ${this.state.projectsList.length}`)
+                this.setState({ projectsList: data.Projects })
+                // console.log(`Number of projects : ${this.state.projectsList.length}`)
             })
 
             .catch(error => {
                 console.log(`Error at getProjects : ${error}`)
                 this.setState({ error: true })
             })
+
+        // if (`${this.state.projectsList.length}<1`) {
+        //     this.setState({ noProjects: true })
+        // }
     }
 
     componentDidMount() {
-        console.log(this.props.appID)
         this.getEducation(this.props.appID)
         this.getJobExp(this.props.appID)
         this.getAwards(this.props.appID)
@@ -199,175 +215,165 @@ class EmpAppCard extends Component {
     }
 
     educationContent = () => {
-        console.log(this.state.educationList)
-        // Loading
-        if (this.state.educationList.length === 0 && !this.state.error) {
-            return (
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-                        <span class="sr-only">Loading...</span>
+        if (!this.state.noEducation) {
+            if (this.state.educationList.length === 0 && !this.state.error) {
+                return (
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
-                </div>
-            )
-        }
-        else if (this.state.educationList.length > 0 && !this.state.error) {
-            return (
-                this.state.educationList.map((education) => {
-                    return (
-                        <li className="cardli">
-                            {education.degree} &nbsp; {education.fieldofstudy} ({education.major})
-                            <br />
-                            {education.university} | {education.gpa}
-                        </li>
+                )
+            }
+            else if (this.state.educationList.length > 0 && !this.state.error) {
+                return (
+                    this.state.educationList.map(education => (
+                        <tr>
+                            <td>{education.FieldOfStudy}</td>
+                            <td>{education.Major}</td>
+                            <td>{education.University}</td>
+                            <td>{education.GPA}</td>
+                            <td>{education.Mode}</td>
+                        </tr>
+                    )))
+            }
 
-                    )
-                })
-            )
+            else
+                return <div>Error</div>
+
         }
-        else return <div>Error</div>
+        else
+            return <div>No Education Records found</div>
     }
-    
+
     jobExpContent = () => {
-        console.log(this.state.jobExpList)
-        // Loading
-        if (this.state.jobExpList.length === 0 && !this.state.error) {
-            return (
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-                        <span class="sr-only">Loading...</span>
+        if (!this.state.noJobExp) {
+            if (this.state.jobExpList.length === 0 && !this.state.error) {
+                return (
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
-                </div>
-            )
+                )
+            }
+            else if (this.state.jobExpList.length > 0 && !this.state.error) {
+                return (
+                    this.state.jobExpList.map((jobExp) => {
+                        return (
+                            <tr>
+                                <td>{jobExp.Position}</td>
+                                <td>{jobExp.Mode}</td>
+                                <td>{jobExp.Company}</td>
+                                <td>{jobExp.Industry}</td>
+                                <td>{jobExp.Description}</td>
+                                <td>{jobExp.StartDate}</td>
+                                <td>{jobExp.EndDate}</td>
+                                <td>{jobExp.AnnualSalary}</td>
+
+                            </tr>
+
+                        )
+                    })
+                )
+            }
+            else return <div>Error</div>
         }
-        else if (this.state.jobExpList.length > 0 && !this.state.error) {
-            return (
-                this.state.jobExpList.map((jobExp) => {
-                    return (
-                        <li className="cardli">
-                            <Row>
-                                <Col md={3}>
-                                    {jobExp.mode}
-                                </Col>
-                                <Col md={3}>
-                                    {jobExp.postion}
-                                </Col>
-                            </Row>
-                            <Row>
-                                {jobExp.company}
-                            </Row>
-
-                            <Row>
-                                {jobExp.description}
-                            </Row>
-
-                        </li>
-
-                    )
-                })
-            )
-        }
-        else return <div>Error</div>
+        else return <div>No Job Experience records found</div>
     }
 
     awardsContent = () => {
-        console.log(this.state.awardsList)
-        // Loading
-        if (this.state.awardsList.length === 0 && !this.state.error) {
-            return (
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-                        <span class="sr-only">Loading...</span>
+        if (this.state.noAwards) {
+            return <div>No awards content found</div>
+        }
+        else {
+            // Loading
+            if (this.state.awardsList.length === 0 && !this.state.error) {
+                return (
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
-                </div>
-            )
+                )
+            }
+            else if (this.state.awardsList.length > 0 && !this.state.error) {
+                return (
+                    this.state.awardsList.map((award) => {
+                        return (
+                            <tr>
+                                <td>{award.Award}</td>
+                                <td>{award.Description}</td>
+                                <td>{award.Date}</td>
+                            </tr>
+                        )
+                    })
+                )
+            }
+            else return <div>Error</div>
         }
-        else if (this.state.awardsList.length > 0 && !this.state.error) {
-            return (
-                this.state.awardsList.map((award) => {
-                    return (
-                        <li className="cardli">
-                            <Row>
-                                {award.awardname}
-                            </Row>
-                            <Row>
-                                {award.awarddate}
-                            </Row>
-                        </li>
-
-                    )
-                })
-            )
-        }
-        else return <div>Error</div>
     }
 
     certsContent = () => {
-        console.log(this.state.certsList)
-        // Loading
-        if (this.state.certsList.length === 0 && !this.state.error) {
-            return (
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-                        <span class="sr-only">Loading...</span>
+        if (!this.state.noCerts) {
+            // Loading
+            if (this.state.certsList.length === 0 && !this.state.error) {
+                return (
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
-                </div>
-            )
+                )
+            }
+            else if (this.state.certsList.length > 0 && !this.state.error) {
+                return (
+                    this.state.certsList.map((cert) => {
+                        return (
+                            <tr>
+                                <td>{cert.Name}</td>
+                                <td>{cert.IssuedBy}</td>
+                                <td>{cert.IssuedDate}</td>
+                                <td>{cert.ValidUntil}</td>
+                            </tr>
+                        )
+                    })
+                )
+            }
+            else return <div> Error </div>
         }
-        else if (this.state.certsList.length > 0 && !this.state.error) {
-            return (
-                this.state.certsList.map((cert) => {
-                    return (
-                        <li className="cardli">
-                            <Row>
-                                {cert.certificatename}
-                            </Row>
-                            <Row>
-                                Issued by: {cert.issuedby} <br />
-                                Issued on: {cert.issueddate}
-                                Valid till: {cert.validuntil}
-                            </Row>
-                        </li>
-
-                    )
-                })
-            )
-        }
-        else return <div>Error</div>
+        else return <div>No certificate content found.</div>
     }
 
     projectsContent = () => {
-        console.log(this.state.projectsList)
-        // Loading
-        if (this.state.projectsList.length === 0 && !this.state.error) {
-            return (
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-                        <span class="sr-only">Loading...</span>
+        if (!this.state.noProjects) {
+            // Loading
+            if (this.state.projectsList.length === 0 && !this.state.error) {
+                return (
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
-                </div>
-            )
+                )
+            }
+            else if (this.state.projectsList.length > 0 && !this.state.error) {
+                return (
+                    this.state.projectsList.map((project) => {
+                        return (
+                            <tr>
+                                <td>{project.Title}</td>
+                                <td>{project.Status}</td>
+                                <td>{project.Description}</td>
+                                <td><a href={project.Link} /></td>
+                            </tr>
+                        )
+                    })
+                )
+            }
+            else return <div> Error</div>
         }
-        else if (this.state.projectsList.length > 0 && !this.state.error) {
-            return (
-                this.state.projectsList.map((project) => {
-                    return (
-                        <li className="cardli">
-                            <Row>
-                                {project.title}
-                            </Row>
-                            <Row>
-                                {project.description}
-                            </Row>
-                            <Row>
-                                {project.link}
-                            </Row>
-                        </li>
-
-                    )
-                })
-            )
-        }
-        else return <div>Error</div>
+        else return <div>No projects content found</div>
     }
 
     hideAlert = () => {
@@ -384,12 +390,13 @@ class EmpAppCard extends Component {
     }
 
     shortlist = (appId, jobId) => {
+        //to update shortlist link
         const application = {
             jobid: jobId,
             appid: appId
         }
 
-        const url = apiURL + "employer/shortlist"
+        const url = apiURL + `employer/shortlist/`
         const localhost = 'http://localhost:3001/employer/shortlist/'
 
         fetch(url, {
@@ -409,17 +416,7 @@ class EmpAppCard extends Component {
             .catch(error => console.log(error))
         // alert('Applicant has been shortlisted!')
         // document.location.reload(true)
-        }
-    shortlist = (appId, appName) => {
-        this.showAlert();
-
-        return (
-            <div>
-
-            </div>
-        )
     }
-
 
 
     render() {
@@ -442,45 +439,118 @@ class EmpAppCard extends Component {
                             <i class="fas fa-book"></i>
                             &nbsp; <em> Education</em>
                             <br />
-                            <this.educationContent />
-                            <ul className="cardul">
+                            <Row>
+                                <Col sm={12}>
+                                    <Table striped bordered hover variant="light">
+                                        <thead>
+                                            <tr>
+                                                <th>Degree</th>
+                                                <th>Major</th>
+                                                <th>University</th>
+                                                <th>GPA</th>
+                                                <th>Mode</th>
 
-                            </ul>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <this.educationContent />
+                                        </tbody>
+                                    </Table>
+                                </Col>
+
+                            </Row>
                         </Card.Text>
 
                         <Card.Text>
                             <i class="fas fa-briefcase"></i>
                             &nbsp; <em>Job Experience</em>
-                            <ul className="cardul">
-                                <this.jobExpContent />
-                            </ul>
+                            <Row>
+                                <Col sm={12}>
+                                    <Table striped bordered hover variant="light">
+                                        <thead>
+                                            <tr>
+                                                <th>Mode</th>
+                                                <th>Company</th>
+                                                <th>Industry</th>
+                                                <th>Job Description</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Annual Salary</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <this.jobExpContent />
+                                        </tbody>
+                                    </Table>
+                                </Col>
+                            </Row>
                         </Card.Text>
 
                         <Card.Text>
                             <i class="fas fa-medal"></i>
                             &nbsp; <em>Awards Obtained</em>
-                            <ul className="cardul">
-                                <this.awardsContent />
-                            </ul>
+                            <Row>
+                                <Col sm={12}>
+                                    <Table striped bordered hover variant="light">
+                                        <thead>
+                                            <tr>
+                                                <th>Title of Award</th>
+                                                <th>Description</th>
+                                                <th>Date Awarded</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <this.awardsContent />
+                                        </tbody>
+                                    </Table>
+                                </Col>
+                            </Row>
                         </Card.Text>
 
                         <Card.Text>
                             <i class="fas fa-stamp"></i>
                             &nbsp; <em>Professional Certifications Obtained</em>
-                            <ul className="cardul">
-                                <this.certsContent />
-                            </ul>
+                            <Row>
+                                <Col sm={12}>
+                                    <Table striped bordered hover variant="light">
+                                        <thead>
+                                            <tr>
+                                                <th>Name of Certification</th>
+                                                <th>Issued By</th>
+                                                <th>Issued on</th>
+                                                <th>Valid Until</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <this.certsContent />
+                                        </tbody>
+                                    </Table>
+                                </Col>
+                            </Row>
                         </Card.Text>
 
                         <Card.Text>
                             <i class="fas fa-folder-open"></i>
                             &nbsp; <em>Featured Projects</em>
-                            <ul className="cardul">
-                                <this.projectsContent />
-                            </ul>
+                            <Row>
+                                <Col sm={12}>
+                                    <Table striped bordered hover variant="light">
+                                        <thead>
+                                            <tr>
+                                                <th>Project Title</th>
+                                                <th>Project Status</th>
+                                                <th>Description</th>
+                                                <th>Project Link</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <this.projectsContent />
+                                        </tbody>
+                                    </Table>
+                                </Col>
+                            </Row>
                         </Card.Text>
 
-                        {/*<Card.Text>{props.appSkills}</Card.Text>*/}
                         <Card.Text><i class="fas fa-phone"></i> &nbsp;{this.props.appPhone}</Card.Text>
                         <Card.Text><i class="far fa-envelope"></i> &nbsp;{this.props.appEmail}</Card.Text>
                         {/* <Card.Text>
@@ -490,14 +560,10 @@ class EmpAppCard extends Component {
                     
                     </Card.Text> */}
 
-                        <Button variant="success" onClick={this.shortlist(123, 456)} >Shortlist</Button>
-
-
-
-                        {/* onClick={this.shortlist("asjdkasj", "Juna")} */}
+                        <Button variant="success" onClick={() => { this.shortlist(123, 456) }} >Shortlist</Button>
                     </Card.Body>
                 </Card>
-                </div>
+            </div >
         )
     }
 }
